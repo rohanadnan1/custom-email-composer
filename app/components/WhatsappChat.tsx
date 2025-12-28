@@ -10,15 +10,25 @@ import React from "react";
  * 3. Mobile/Desktop Auto-detection via wa.me
  */
 
-export default function WhatsAppChat(): React.ReactElement {
-  // CONFIGURATION
-  const phoneNumber = process.env.WHATSAPP_NUMBER; // Baghair '+' ya spaces ke likhein
-  console.log(phoneNumber, 'number')
-  const defaultMessage = process.env.GREET_MESSAGE || "Hey";
+export default function WhatsAppChat(): React.ReactElement | null {
+  // CONFIGURATION - Use NEXT_PUBLIC_ prefix for client-side access
+  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER; // Baghair '+' ya spaces ke likhein
+  const defaultMessage = process.env.NEXT_PUBLIC_GREET_MESSAGE || "Hey";
+
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // URL Construction
   const encodedMessage = encodeURIComponent(defaultMessage);
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+  // Prevent hydration mismatch by only rendering on client
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <a
