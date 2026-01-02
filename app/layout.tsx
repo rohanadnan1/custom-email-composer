@@ -36,7 +36,7 @@ export default function RootLayout({
         {/* <ThemeProvider> */}
           <Navigation />
           {children}
-          <WhatsAppChat />
+          {/* <WhatsAppChat /> */}
           {/* <ChatBot /> */}
         {/* </ThemeProvider> */}
       </body>

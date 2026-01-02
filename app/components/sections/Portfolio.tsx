@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -72,6 +76,8 @@ export default function Portfolio() {
   });
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   const filteredProjects =
     activeCategory === "All"
@@ -109,11 +115,63 @@ export default function Portfolio() {
     emblaApi.reInit();
   }, [activeCategory, emblaApi]);
 
+  // Scroll-triggered animations
+  useEffect(() => {
+    // Header animation
+    if (headerRef.current) {
+      const headerElements = headerRef.current.querySelectorAll("span, h2, p");
+      
+      gsap.fromTo(
+        headerElements,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+    }
+
+    // Cards container animation
+    if (cardsContainerRef.current) {
+      gsap.fromTo(
+        cardsContainerRef.current,
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: cardsContainerRef.current,
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
     <section id="portfolio" className="py-24 md:py-32">
       <div className="container-cls mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div ref={headerRef} className="text-center mb-16">
           <span className="section-label">Portfolio</span>
           <h2 className="section-title uppercase">Some Of Our Work</h2>
           <p className="text-muted max-w-4xl mx-auto">
@@ -139,7 +197,7 @@ export default function Portfolio() {
         </div> */}
 
         {/* Projects Slider */}
-        <div className="relative">
+        <div className="relative" ref={cardsContainerRef}>
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-8">
               {filteredProjects.map((project) => (

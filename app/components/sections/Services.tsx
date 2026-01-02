@@ -1,6 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
@@ -70,6 +74,60 @@ const services = [
 ];
 
 export default function Services() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // Header animation
+    if (headerRef.current) {
+      const headerElements = headerRef.current.querySelectorAll("span, h2, p");
+      
+      gsap.fromTo(
+        headerElements,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+    }
+
+    // Cards stagger animation
+    if (cardsRef.current.length > 0) {
+      gsap.fromTo(
+        cardsRef.current,
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: cardsRef.current[0]?.parentElement,
+            start: "top 60%",
+            once: true,
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
   return (
     <section id="services" className="py-24 md:py-32 relative">
       {/* Background */}
@@ -77,7 +135,7 @@ export default function Services() {
 
       <div className="container-cls relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-16">
         {/* Section Header */}
-        <div className="text-center flex flex-col items-center">
+        <div ref={headerRef} className="text-center flex flex-col items-center">
           <span className="section-label">What We Do</span>
           <h2 className="section-title uppercase">
             Never Worry About<br/> Your<span className="gradient-text"> Website </span>Ever Again
@@ -88,12 +146,14 @@ export default function Services() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-animation">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group p-6 rounded-2xl bg-card-bg border border-card-border card-hover animate-fadeInUp opacity-0"
-              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+              ref={(el) => {
+                if (el) cardsRef.current[index] = el;
+              }}
+              className="group p-6 rounded-2xl bg-card-bg border border-card-border card-hover"
             >
               {/* Icon */}
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
