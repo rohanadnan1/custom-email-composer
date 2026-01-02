@@ -1,7 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Check, X } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface PricingPlan {
   name: string;
@@ -66,14 +70,81 @@ const plans: PricingPlan[] = [
 ];
 
 export default function Pricing() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    // Animate header
+    if (headerRef.current) {
+      const headerElements = headerRef.current.querySelectorAll("span, h2, p");
+      
+      gsap.set(headerElements, { opacity: 0, y: 30 });
+
+      const trigger = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 70%",
+        once: true,
+        onEnter: () => {
+          gsap.to(headerElements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.15,
+          });
+        },
+        onRefresh: (self) => {
+          if (self.progress === 1) {
+            gsap.set(headerElements, { opacity: 1, y: 0 });
+          }
+        },
+      });
+
+      return () => trigger.kill();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!cardsContainerRef.current) return;
+
+    // Animate pricing cards
+    const cards = cardsContainerRef.current.querySelectorAll("[data-pricing-card]");
+    
+    cards.forEach((card) => {
+      gsap.set(card, { opacity: 0, y: 50 });
+    });
+
+    const trigger = ScrollTrigger.create({
+      trigger: cardsContainerRef.current,
+      start: "top 70%",
+      once: true,
+      onEnter: () => {
+        gsap.to(cards, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+        });
+      },
+      onRefresh: (self) => {
+        if (self.progress === 1) {
+          gsap.set(cards, { opacity: 1, y: 0 });
+        }
+      },
+    });
+
+    return () => trigger.kill();
+  }, []);
   return (
-    <section id="pricing" className="py-24 md:py-32 relative">
+    <section id="pricing" className="py-24 md:py-32 relative" ref={sectionRef}>
       {/* Background */}
       <div className="absolute inset-0 bg-secondary/50" />
 
       <div className="container-cls relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-16">
         {/* Section Header */}
-        <div className="text-center flex flex-col items-center">
+        <div ref={headerRef} className="text-center flex flex-col items-center">
           <span className="section-label">Pricing Plans</span>
           <h2 className="section-title uppercase">
             Choose Your Perfect<span className="gradient-text"> Package</span>
@@ -84,16 +155,16 @@ export default function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative rounded-2xl p-8 transition-all duration-300 animate-fadeInUp opacity-0 ${
+              data-pricing-card
+              className={`relative rounded-2xl p-8 transition-all duration-300 ${
                 plan.highlighted
                   ? "bg-gradient-to-br from-primary/10 to-purple-500/10 border-2 border-primary shadow-lg shadow-primary/20 md:scale-105"
                   : "bg-card-bg border border-card-border card-hover"
               }`}
-              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             >
               {/* Plan Name */}
               <div className="mb-6">

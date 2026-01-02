@@ -73,6 +73,11 @@ export default function Portfolio() {
     align: "start",
     loop: true,
     slidesToScroll: 1,
+    breakpoints: {
+      "(max-width: 640px)": { slidesToScroll: 1 },
+      "(min-width: 641px) and (max-width: 1024px)": { slidesToScroll: 1 },
+      "(min-width: 1025px)": { slidesToScroll: 1 },
+    },
   });
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
@@ -203,7 +208,7 @@ export default function Portfolio() {
               {filteredProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex-[0_0_calc(33.333%-21px)] min-w-0 md:flex-[0_0_calc(50%-16px)] lg:flex-[0_0_calc(33.333%-21px)]"
+                  className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_calc(50%-16px)] lg:flex-[0_0_calc(33.333%-21px)]"
                 >
                   <a
                     href={project.link}

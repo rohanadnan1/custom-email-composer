@@ -5,6 +5,7 @@ import WhatsAppChat from "./components/WhatsappChat";
 import ChatBot from "./components/ChatBot";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Navigation from "./components/Navigation";
+import LocomotiveScroll from "./components/Locomotive";
 
 const interFont = Inter({
   variable: "--font-inter",
@@ -34,10 +35,12 @@ export default function RootLayout({
       >
         {/* ThemeProvider removed - Dark mode only */}
         {/* <ThemeProvider> */}
+        {/* <LocomotiveScroll> */}
           <Navigation />
           {children}
-          {/* <WhatsAppChat /> */}
-          {/* <ChatBot /> */}
+        {/* </LocomotiveScroll> */}
+        {/* <WhatsAppChat /> */}
+        {/* <ChatBot /> */}
         {/* </ThemeProvider> */}
       </body>
     </html>

@@ -76,6 +76,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* locomotive-scroll.css */
+html.has-scroll-smooth {
+  overflow: hidden;
+}
+
+[data-scroll-container] {
+  min-height: 100vh;
+}
+
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -329,3 +339,26 @@ body {
 .dark .glow {
   box-shadow: 0 0 60px rgba(129, 140, 248, 0.2);
 }
+
+/* Locomotive Scroll Styles */
+.dark .c-scrollbar_thumb {
+  background-color: rgba(129, 140, 248, 0.5);
+}
+
+.c-scrollbar {
+  background-color: rgba(30, 30, 46, 0.5);
+}
+
+html.locomotive-enabled {
+  overflow: hidden;
+}
+
+html.locomotive-enabled body {
+  overflow: hidden;
+}
+
+[data-scroll-container] {
+  width: 100%;
+  min-height: 100vh;
+}
+
