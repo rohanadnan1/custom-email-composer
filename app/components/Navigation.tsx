@@ -7,7 +7,7 @@ const navLinks = [
   { name: "Services", href: "#services" },
   { name: "Portfolio", href: "#portfolio" },
   { name: "About", href: "#about" },
-  { name: "Testimonials", href: "#testimonials" },
+  // { name: "Testimonials", href: "#testimonials" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -59,15 +59,17 @@ export default function Navigation() {
 
   return (
     <header
-      className={`flex justify-center fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "glass py-3" : "py-4 bg-transparent"
-        }`}
+      className={` 
+        flex justify-center fixed top-0 left-0 right-0 z-50 transition-all duration-300 
+        ${isScrolled ? "glass" : "bg-transparent"}`
+      }
     >
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className={` ${isScrolled ? "py-2" : "py-4"} w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${isMobileMenuOpen ? "bg-card-bg" : ""} ease-in-out transition-all`}>
         <nav className="flex items-center justify-between h-14">
           {/* Logo */}
           <a
             href="#home"
-            className="flex-shrink-0 text-xl font-bold gradient-text hover:opacity-80 transition-opacity"
+            className="shrink-0 text-xl font-bold gradient-text hover:opacity-80 transition-opacity"
           >
             Portfolio
           </a>
@@ -89,11 +91,11 @@ export default function Navigation() {
           </div>
 
           {/* Theme Toggle & CTA */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Theme Toggle Button */}
             {/* <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-secondary hover:bg-card-border transition-colors flex-shrink-0"
+              className="p-2 rounded-full bg-secondary hover:bg-card-border transition-colors shrink-0"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? (
@@ -146,7 +148,7 @@ export default function Navigation() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors flex-shrink-0"
+              className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors shrink-0"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (

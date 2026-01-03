@@ -36,11 +36,11 @@ export default function RootLayout({
         {/* ThemeProvider removed - Dark mode only */}
         {/* <ThemeProvider> */}
         {/* <LocomotiveScroll> */}
-          <Navigation />
-          {children}
+        <Navigation />
+        {children}
         {/* </LocomotiveScroll> */}
         {/* <WhatsAppChat /> */}
-        {/* <ChatBot /> */}
+        <ChatBot />
         {/* </ThemeProvider> */}
       </body>
     </html>

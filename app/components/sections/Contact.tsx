@@ -258,20 +258,16 @@ export default function Contact() {
                 <label htmlFor="subject" className="block text-sm font-medium mb-2">
                   Subject
                 </label>
-                <select
+                <input
+                  type="text"
                   id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-xl bg-secondary border border-card-border focus:border-primary focus:outline-none transition-colors"
-                >
-                  <option value="">Select a subject</option>
-                  <option value="project">New Project</option>
-                  <option value="collaboration">Collaboration</option>
-                  <option value="consultation">Consultation</option>
-                  <option value="other">Other</option>
-                </select>
+                  placeholder="What is this about?"
+                />
               </div>
 
               <div>
